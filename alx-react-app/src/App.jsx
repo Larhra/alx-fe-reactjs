@@ -9,7 +9,10 @@ function App() {
 
   return (
     <>
-      <WelcomeMessage />   
+      <WelcomeMessage />  
+      <Footer />
+      <Header />
+      <MainContent /> 
     </>
   )
 }
