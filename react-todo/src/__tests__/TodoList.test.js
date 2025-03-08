@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import TodoList from "../TodoList"; // Make sure the path is correct
+import TodoList from "../TodoList"; // Ensure the path is correct
 
 test("renders the TodoList with initial items", () => {
     render(<TodoList />);
