@@ -13,6 +13,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="profile/*" element={<Profile />} /> {/* Profile route is now the parent route */}
           <Route path="post/:id" element={<Post />} />
+          <Route path="blog/:id" element={<BlogPost  />} />
         </Routes>
       </div>
     </Router>
