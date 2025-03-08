@@ -4,6 +4,7 @@ import Home from './components/Home';
 import Profile from './components/Profile';
 import Post from './components/Post';
 import BlogPost from './components/BlogPost';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="profile/*" element={<Profile />} /> {/* Profile route is now the parent route */}
           <Route path="post/:id" element={<Post />} />
           <Route path="/blog/:id" element={<BlogPost  />} />
+          <Route path="/profile" element={<ProtectedRoute  />} />
         </Routes>
       </div>
     </Router>
