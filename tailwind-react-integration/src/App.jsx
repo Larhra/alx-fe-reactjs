@@ -1,13 +1,1 @@
-import UserProfile from "./components/UserProfile";
-import "./App.css";
-
-function App() {
-  return (
-    <>
-      <UserProfile />
-      <UserProfile />
-    </>
-  );
-}
-
-export default App;
+<h1 className="text-blue-500 text-3xl font-bold">Hello, Tailwind CSS!</h1>
