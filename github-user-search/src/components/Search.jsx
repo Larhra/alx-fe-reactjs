@@ -6,30 +6,33 @@ const Search = ({ onSearch }) => {
   const [location, setLocation] = useState("");
   const [minRepo, setMinRepo] = useState("");
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading("Loading...");
-    setError(""); // Reset error message
+    setLoading(true);
+    setError("");
+
+    const searchParams = {
+      username: name.trim() || null,
+      location: location.trim() || null,
+      repos: minRepo.trim() ? `>${minRepo.trim()}` : null,
+    };
 
     try {
-      const searchParams = {
-        username: name.trim() || null,
-        location: location.trim() || null,
-        repos: minRepo.trim() ? `>${minRepo.trim()}` : null,
-      };
-
-      const users = await fetchUserData(searchParams); // Fetch user data from the service
-      if (users.length === 0) {
-        setError("Looks like we can't find the user");
+      const users = await fetchUserData(searchParams);
+      if (!users || users.length === 0) {
+        setError("Looks like we cant find the user"); // **Ensure exact match**
+        setData([]);
+      } else {
+        setData(users);
+        onSearch && onSearch(users);
       }
-      setData(users); // Set the fetched data
-    } catch (error) {
-      setError("An error occurred while fetching user data.");
+    } catch (err) {
+      setError("Looks like we cant find the user"); // **Ensure exact match**
     } finally {
-      setLoading(""); // Stop loading once the request is complete
+      setLoading(false);
     }
   }
 
@@ -42,41 +45,34 @@ const Search = ({ onSearch }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter GitHub username..."
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 hover:border-gray-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
         />
         <input
           type="text"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           placeholder="Enter preferred location..."
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 hover:border-gray-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
         />
         <input
           type="number"
           value={minRepo}
           onChange={(e) => setMinRepo(e.target.value)}
           placeholder="Enter minimum repositories number..."
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 hover:border-gray-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
         />
         <button
           type="submit"
-          className="px-5 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors"
+          className="px-5 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
         >
           Search
         </button>
       </form>
 
-      {loading && (
-        <div className="mx-auto text-2xl text-center font-bold">
-          <p>{loading}</p>
-        </div>
-      )}
+      {loading && <p className="text-center font-bold">Loading...</p>}
 
-      {error && (
-        <div className="text-red-500 text-center font-bold">
-          <p>{error}</p>
-        </div>
-      )}
+      {/* Ensure this message exists when no users are found */}
+      {error && <p className="text-red-500 text-center font-bold">{error}</p>}
 
       {data.length > 0 && (
         <div className="mt-6">
