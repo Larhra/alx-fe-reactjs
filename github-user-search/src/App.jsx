@@ -1,24 +1,46 @@
-import "./App.css";
-import Home from "./components/Home";
+import { useState } from "react";
+import { fetchUserData } from "./services/githubService";
 import Search from "./components/Search";
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Link,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
-function App() {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-      </Route>
-    )
-  );
 
-  return <RouterProvider router={router} />;
-}
+
+const App = () => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSearch = async (username) => {
+    setLoading(true);
+    setError("");
+    setUser(null);
+
+    try {
+      const data = await fetchUserData(username);
+      setUser(data);
+    } catch (err) {
+      setError("Looks like we can't find the user");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">GitHub User Search</h1>
+      <Search onSearch={handleSearch} />
+
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+      {user && (
+        <div className="border p-4 rounded-lg mt-4">
+          <img src={user.avatar_url} alt={user.login} className="w-24 rounded-full" />
+          <h2 className="text-xl">{user.name || user.login}</h2>
+          <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+            Visit Profile
+          </a>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default App;
