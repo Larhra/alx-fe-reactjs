@@ -11,25 +11,26 @@ const Search = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);  // Set loading state to true
-
+    setLoading(true); // Set loading state to true
+  
     try {
       const searchParams = {
         username: name.trim() || null,
         location: location.trim() || null,
         repos: minRepo.trim() ? `>${minRepo.trim()}` : null,
       };
-
+  
       const users = await fetchUserData(searchParams);
       setData(users);
-      setError("");  // Reset any previous errors if users are found
+      setError(""); // Reset any previous errors if users are found
     } catch (error) {
-      setError("No users found.");  // Set error message when API fails
-      setData([]);  // Reset data if no users are found
+      setError("Looks like we can't find the user."); // Set the error to the required message
+      setData([]); // Reset data if no users are found
     } finally {
-      setLoading(false);  // Stop loading regardless of success or failure
+      setLoading(false); // Stop loading regardless of success or failure
     }
   }
+  
 
   return (
     <div className="p-4 max-w-lg mx-auto">
