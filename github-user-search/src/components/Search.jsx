@@ -6,11 +6,12 @@ const Search = () => {
   const [location, setLocation] = useState("");
   const [minRepo, setMinRepo] = useState("");
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);  // Set to false to track loading state
+  const [error, setError] = useState("");  // Add error state to handle errors
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading("Loading...");
+    setLoading(true);  // Set loading state to true
 
     try {
       const searchParams = {
@@ -21,10 +22,12 @@ const Search = () => {
 
       const users = await fetchUserData(searchParams);
       setData(users);
+      setError("");  // Reset any previous errors if users are found
     } catch (error) {
-      setLoading("No users found.");
+      setError("No users found.");  // Set error message when API fails
+      setData([]);  // Reset data if no users are found
     } finally {
-      setLoading("");
+      setLoading(false);  // Stop loading regardless of success or failure
     }
   }
 
@@ -63,7 +66,13 @@ const Search = () => {
 
       {loading && (
         <div className="mx-auto text-2xl text-center font-bold">
-          <p>{loading}</p>
+          <p>Loading...</p>  {/* Only show "Loading..." when loading is true */}
+        </div>
+      )}
+
+      {error && (
+        <div className="mx-auto text-xl text-center text-red-500 font-bold">
+          <p>{error}</p>  {/* Display error message */}
         </div>
       )}
 
