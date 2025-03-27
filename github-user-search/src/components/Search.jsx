@@ -6,13 +6,11 @@ const Search = () => {
   const [location, setLocation] = useState("");
   const [minRepo, setMinRepo] = useState("");
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);  // loading state
-  const [error, setError] = useState("");  // error state for error message
+  const [loading, setLoading] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);  // Set loading to true at the start of the API call
-    setError("");  // Reset error message if a new search is attempted
+    setLoading("Loading...");
 
     try {
       const searchParams = {
@@ -22,16 +20,11 @@ const Search = () => {
       };
 
       const users = await fetchUserData(searchParams);
-
-      if (users.length === 0) {
-        setError("Looks like we can't find the user"); // Show error if no users are returned
-      } else {
-        setData(users);
-      }
+      setData(users);
     } catch (error) {
-      setError("Looks like we can't find the user");  // Show error in case of any API issue
+      setLoading("No users found.");
     } finally {
-      setLoading(false);  // Stop loading after the API call completes
+      setLoading("");
     }
   }
 
@@ -70,13 +63,7 @@ const Search = () => {
 
       {loading && (
         <div className="mx-auto text-2xl text-center font-bold">
-          <p>Loading...</p>
-        </div>
-      )}
-
-      {error && (
-        <div className="mx-auto text-xl text-center text-red-500 font-bold">
-          <p>{error}</p> {/* Display specific error message */}
+          <p>{loading}</p>
         </div>
       )}
 
