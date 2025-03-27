@@ -6,12 +6,13 @@ const Search = () => {
   const [location, setLocation] = useState("");
   const [minRepo, setMinRepo] = useState("");
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);  // Set to false to track loading state
-  const [error, setError] = useState("");  // Add error state to handle errors
+  const [loading, setLoading] = useState(false);  // loading state
+  const [error, setError] = useState("");  // error state for error message
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);  // Set loading state to true
+    setLoading(true);  // Set loading to true at the start of the API call
+    setError("");  // Reset error message if a new search is attempted
 
     try {
       const searchParams = {
@@ -21,13 +22,16 @@ const Search = () => {
       };
 
       const users = await fetchUserData(searchParams);
-      setData(users);
-      setError("");  // Reset any previous errors if users are found
+
+      if (users.length === 0) {
+        setError("Looks like we can't find the user"); // Show error if no users are returned
+      } else {
+        setData(users);
+      }
     } catch (error) {
-      setError("Looks like we can't find the user");  // Set the specific error message
-      setData([]);  // Reset data if no users are found
+      setError("Looks like we can't find the user");  // Show error in case of any API issue
     } finally {
-      setLoading(false);  // Stop loading regardless of success or failure
+      setLoading(false);  // Stop loading after the API call completes
     }
   }
 
@@ -66,13 +70,13 @@ const Search = () => {
 
       {loading && (
         <div className="mx-auto text-2xl text-center font-bold">
-          <p>Loading...</p>  {/* Only show "Loading..." when loading is true */}
+          <p>Loading...</p>
         </div>
       )}
 
       {error && (
         <div className="mx-auto text-xl text-center text-red-500 font-bold">
-          <p>{error}</p>  {/* Display error message */}
+          <p>{error}</p> {/* Display specific error message */}
         </div>
       )}
 
