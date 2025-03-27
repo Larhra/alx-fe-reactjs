@@ -2,7 +2,6 @@ import { useState } from "react";
 import { fetchUserData } from "./services/githubService";
 import Search from "./components/Search";
 
-
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -14,19 +13,20 @@ const App = () => {
     setUser(null);
 
     try {
-      const data = await fetchUserData(username);
-      setUser(data);
+      // Fetch user data using the username
+      const data = await fetchUserData({ username });  // Here is the correct function call
+      setUser(data); // Set the fetched user data
     } catch (err) {
-      setError("Looks like we can't find the user");
+      setError("Looks like we can't find the user"); // Handle errors (if any)
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading once the request is complete
     }
   };
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">GitHub User Search</h1>
-      <Search onSearch={handleSearch} />
+      <Search onSearch={handleSearch} />  {/* Pass handleSearch to Search component */}
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
