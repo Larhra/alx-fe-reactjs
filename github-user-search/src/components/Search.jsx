@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { fetchUserData } from "../services/githubService";
+import fetchUserData from "../services/githubService";
 
 const Search = () => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [minRepo, setMinRepo] = useState("");
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");  // New state for error handling
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading("Loading...");
-    setError(""); // Clear previous errors
+    setLoading(true);
+    setError(""); // Reset any previous error message
 
     try {
       const searchParams = {
@@ -22,14 +22,12 @@ const Search = () => {
       };
 
       const users = await fetchUserData(searchParams);
-      if (users.length === 0) {
-        setError("Looks like we can't find the user."); // Set the exact error message
-      }
       setData(users);
     } catch (error) {
-      setError("Error: Could not fetch data. Please try again.");
+      setError("Looks like we can't find the user");  // Display error message
+      setData([]);  // Clear previous search results
     } finally {
-      setLoading("");
+      setLoading(false);
     }
   }
 
@@ -68,12 +66,12 @@ const Search = () => {
 
       {loading && (
         <div className="mx-auto text-2xl text-center font-bold">
-          <p>{loading}</p>
+          <p>Loading...</p>
         </div>
       )}
 
       {error && (
-        <div className="text-red-500 text-center mt-4">
+        <div className="mx-auto text-2xl text-center font-bold text-red-500">
           <p>{error}</p>
         </div>
       )}
