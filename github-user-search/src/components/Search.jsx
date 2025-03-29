@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import fetchUserData from "../services/githubService";
+import { fetchUserData } from "../services/githubService";
 
 const Search = () => {
   const [name, setName] = useState("");
@@ -7,10 +7,12 @@ const Search = () => {
   const [minRepo, setMinRepo] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState("");
+  const [error, setError] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading("Loading...");
+    setError("");
 
     try {
       const searchParams = {
@@ -20,9 +22,12 @@ const Search = () => {
       };
 
       const users = await fetchUserData(searchParams);
+      if (users.length === 0) {
+        setError("No users found.");
+      }
       setData(users);
     } catch (error) {
-      setLoading("No users found.");
+      setError("Error: Could not fetch data. Please try again.");
     } finally {
       setLoading("");
     }
@@ -64,6 +69,12 @@ const Search = () => {
       {loading && (
         <div className="mx-auto text-2xl text-center font-bold">
           <p>{loading}</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="text-red-500 text-center mt-4">
+          <p>{error}</p>
         </div>
       )}
 
