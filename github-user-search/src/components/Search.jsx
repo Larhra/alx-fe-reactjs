@@ -22,7 +22,7 @@ const Search = () => {
       const users = await fetchUserData(searchParams);
       setData(users);
     } catch (error) {
-      setLoading("No users found.");
+      setError("Looks like we can't find the user");
     } finally {
       setLoading("");
     }
