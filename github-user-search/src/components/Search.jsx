@@ -12,7 +12,7 @@ const Search = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading("Loading...");
-    setError("");
+    setError(""); // Clear previous errors
 
     try {
       const searchParams = {
@@ -23,7 +23,7 @@ const Search = () => {
 
       const users = await fetchUserData(searchParams);
       if (users.length === 0) {
-        setError("No users found.");
+        setError("Looks like we can't find the user.");
       }
       setData(users);
     } catch (error) {
