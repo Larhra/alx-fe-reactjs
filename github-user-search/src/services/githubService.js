@@ -8,7 +8,7 @@ export default async function fetchUserData({ username, location, repos }) {
 
     if (username) query.push(`${username} in:login`);
     if (location) query.push(`location:${location}`);
-    if (repos) query.push(`repos:${repos}`);
+    if (repos) query.push(`repos:>=${repos}`); // Adjusted to correctly search for a minimum repo count
 
     if (query.length === 0) {
       throw new Error("At least one search parameter is required.");
@@ -26,8 +26,7 @@ export default async function fetchUserData({ username, location, repos }) {
     if (error.response?.status === 403) {
       throw new Error("GitHub API rate limit exceeded. Please try again later.");
     }
+    // Enhanced error handling: fallback to a default error message if no detailed info is available
     throw new Error(error.response?.data?.message || error.message || "Failed to fetch user data");
   }
 }
-
-// ["https://api.github.com/search/users?q", "minRepos"]
