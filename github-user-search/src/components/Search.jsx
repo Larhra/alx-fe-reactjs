@@ -23,7 +23,7 @@ const Search = () => {
 
       const users = await fetchUserData(searchParams);
       if (users.length === 0) {
-        setError("Looks like we can't find the user.");
+        setError("Looks like we can't find the user."); // Set the exact error message
       }
       setData(users);
     } catch (error) {
