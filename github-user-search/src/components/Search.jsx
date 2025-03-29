@@ -6,28 +6,25 @@ const Search = () => {
   const [location, setLocation] = useState("");
   const [minRepo, setMinRepo] = useState("");
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
-    setError(""); // Reset previous error message
+    setLoading("Loading...");
 
     try {
       const searchParams = {
         username: name.trim() || null,
         location: location.trim() || null,
-        repos: minRepo.trim() || null,
+        repos: minRepo.trim() ? `>${minRepo.trim()}` : null,
       };
 
       const users = await fetchUserData(searchParams);
       setData(users);
     } catch (error) {
-      setError("Looks like we can't find the user");
-      setData([]); // Reset data if an error occurs
+      setLoading("No users found.");
     } finally {
-      setLoading(false);
+      setLoading("");
     }
   }
 
@@ -66,13 +63,7 @@ const Search = () => {
 
       {loading && (
         <div className="mx-auto text-2xl text-center font-bold">
-          <p>Loading...</p>
-        </div>
-      )}
-
-      {error && (
-        <div className="mx-auto text-xl text-center text-red-500 font-bold">
-          <p>{error}</p>
+          <p>{loading}</p>
         </div>
       )}
 
