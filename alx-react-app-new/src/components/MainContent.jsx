@@ -1,7 +1,12 @@
-export default function MainContent () {
+function MainContent() {
+    const style = {
+      backgroundColor: "blue",
+    };
     return (
-    <main>
+      <main style={style}>
         <p>I love to visit New York, Paris, and Tokyo.</p>
-    </main>
+      </main>
     );
-}
+  }
+  
+  export default MainContent;
